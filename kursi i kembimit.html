@@ -1,16 +1,25 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="sq">
 <head>
     <meta charset="UTF-8">
-    <title>Këmbim Valutore</title>
+    <title>Këmbim Valutor</title>
 </head>
 <body>
-    <h2>Këmbim Valutor nga Euro në Lek</h2>
+    <h2>Këmbim Valutor</h2>
     <form action="convert.php" method="post">
-        <label>Vlera në Euro (€):</label>
-        <input type="number" name="euro" step="0.01" required><br><br>
+        
+        <label>Zgjidh monedhën:</label>
+        <select name="monedha" required>
+            <option value="EUR">Euro (€)</option>
+            <option value="USD">Dollar Amerikan ($)</option>
+            <option value="GBP">Pound Britanik (£)</option>
+            <option value="CHF">Frang Zvicerane (CHF)</option>
+        </select><br><br>
 
-        <label>Koeficienti i këmbimit:</label>
+        <label>Vlera:</label>
+        <input type="number" name="vlera" step="0.01" required><br><br>
+
+        <label>Koeficienti i këmbimit në Lek:</label>
         <input type="number" name="kursi" step="0.01" required><br><br>
 
         <input type="submit" value="Konverto">
