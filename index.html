@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="sq">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Konvertues Valutash — i Thjeshtë</title>
+  <style>
+    body{font-family:Arial, Helvetica, sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#f4f6f8}
+    .box{background:#fff;padding:18px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,0.08);width:320px}
+    label{font-size:13px;color:#333}
+    input,select,button{width:100%;padding:8px;margin-top:6px;margin-bottom:10px;border-radius:6px;border:1px solid #ccd}
+    button{background:#0aa;border:0;color:#fff;font-weight:600;cursor:pointer}
+    .result{background:#eef;padding:8px;border-radius:6px}
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h3 style="margin:0 0 8px 0">Konverto monedha</h3>
+
+    <label>Shuma</label>
+    <input id="amount" type="number" value="100" min="0" step="any">
+
+    <label>Nga</label>
+    <select id="from">
+      <option>USD</option>
+      <option>EUR</option>
+      <option>GBP</option>
+      <option>ALL</option>
+      <option>JPY</option>
+    </select>
+
+    <label>Në</label>
+    <select id="to">
+      <option>EUR</option>
+      <option>USD</option>
+      <option>GBP</option>
+      <option>ALL</option>
+      <option>JPY</option>
+    </select>
+
+    <label>Kurs manual (1 FROM = ? TO)</label>
+    <input id="rate" type="text" placeholder="P.sh. 0.92 — lë bosh për kurs shembull">
+
+    <button id="btn">Konverto</button>
+
+    <div id="out" class="result" style="display:none;margin-top:8px"></div>
+  </div>
+
+<script>
+// Kurse shembull (vetëm referencë)
+const sample = { USD:1, EUR:0.92, GBP:0.80, ALL:106.7, JPY:150 };
+
+const amountEl = document.getElementById('amount');
+const fromEl = document.getElementById('from');
+const toEl = document.getElementById('to');
+const rateEl = document.getElementById('rate');
+const out = document.getElementById('out');
+const btn = document.getElementById('btn');
+
+function parseRate(v){
+  if(!v) return null;
+  const n = parseFloat(v.replace(',','.'));
+  return (isFinite(n) && n>0) ? n : null;
+}
+
+function convert(){
+  const amount = parseFloat(amountEl.value) || 0;
+  const from = fromEl.value;
+  const to = toEl.value;
+  const manual = parseRate(rateEl.value);
+
+  let rate;
+  if(manual !== null){
+    rate = manual; // 1 FROM = rate TO
+  } else {
+    const f = sample[from];
+    const t = sample[to];
+    if(!f || !t){ out.style.display='block'; out.textContent='Kurs i pamundur (mungon)'; return; }
+    rate = (1/f)*t; // 1 FROM = rate TO
+  }
+
+  const result = amount * rate;
+  out.style.display='block';
+  out.innerHTML = `${amount} ${from} = ${result.toFixed(4)} ${to}<br><small>1 ${from} = ${rate.toFixed(6)} ${to}</small>`;
+}
+
+btn.addEventListener('click', convert);
+
+// Enter in rate/amount triggers convert
+amountEl.addEventListener('keyup', (e)=>{ if(e.key==='Enter') convert(); });
+rateEl.addEventListener('keyup', (e)=>{ if(e.key==='Enter') convert(); });
+
+</script>
+</body>
+</html>
